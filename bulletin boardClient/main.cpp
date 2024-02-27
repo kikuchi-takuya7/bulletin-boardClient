@@ -82,13 +82,30 @@ int main()
             std::cout << message << std::endl;
         }
 
-        char test[MESSAGELENGTH] = "AllOK";
-        if (message == test) {
+        if (strcmp(message,"AllOK") == 0) {
             break;
         }
 
     }
 
+    //ぐーちょきぱーの指示をもらう
+    //{
+    //    char message[MESSAGELENGTH];	// サーバ側とサイズを合わせること
+    //    SOCKADDR_IN fromAddr;
+    //    int fromlen = sizeof(fromAddr);
+    //    ret = recvfrom(sock, message, sizeof(message), 0, (SOCKADDR*)&fromAddr, &fromlen);
+
+    //    if (ret == SOCKET_ERROR)
+    //    {
+
+    //    }
+    //    else
+    //    {
+    //        std::cout << message << std::endl;
+    //    }
+    //}
+
+    //出す手を入力
     for(int i=0;i<playerNum;i++)
     {
         // 接続先サーバのソケットアドレス情報格納
@@ -130,9 +147,6 @@ int main()
             std::cout << message << std::endl;
         }
 
-        if (message == "AllOK") {
-            break;
-        }
     }
 
     ret = closesocket(sock);
