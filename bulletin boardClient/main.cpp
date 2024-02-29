@@ -26,11 +26,10 @@ int main()
     WSADATA wsaData;
     ret = WSAStartup(MAKEWORD(2, 2), &wsaData);
     // if (ret == SOCKET_ERROR)
-    if (ret != 0)
+    if (ret == SOCKET_ERROR)
     {
-        /*
-            エラー処理
-        */
+        std::cout << "InitoError" << WSAGetLastError() << std::endl;
+        return 1;
     }
 
     // ソケットディスクリプタ
@@ -40,16 +39,14 @@ int main()
     sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
     // 接続先サーバのIPアドレスを入力させる
-    string serverIpAddress = IP;
-    //cout << "Input Server IPv4 address :";
-    //cin >> serverIpAddress;
+    string serverIpAddress;
+    cout << "Input Server IPv4 address :";
+    cin >> serverIpAddress;
     
     //サーバーからAllOKが来るまでプレイヤーの受付を行う。
     int playerNum = 0;
     while (true)
     {
-
-        playerNum++;
 
         // 接続先サーバのソケットアドレス情報格納
         SOCKADDR_IN toAddr;
@@ -67,15 +64,15 @@ int main()
         ret = sendto(sock, message, sizeof(message), 0, (SOCKADDR*)&toAddr, tolen);
         if (ret == SOCKET_ERROR)
         {
-            /*
-                エラー処理
-            */
+            std::cout << "SendtoError" << WSAGetLastError() << std::endl;
+            return 1;
         }
         ret = recvfrom(sock, message, sizeof(message), 0, (SOCKADDR*)&fromAddr, &fromlen);
 
         if (ret == SOCKET_ERROR)
         {
-
+            std::cout << "ResvtoError" << WSAGetLastError() << std::endl;
+            return 1;
         }
         else
         {
@@ -85,6 +82,8 @@ int main()
         if (strcmp(message,"AllOK") == 0) {
             break;
         }
+
+        playerNum++;
 
     }
 
@@ -124,12 +123,13 @@ int main()
         ret = sendto(sock, message, sizeof(message), 0, (SOCKADDR*)&toAddr, tolen);
         if (ret == SOCKET_ERROR)
         {
-            /*
-                エラー処理
-            */
+            std::cout << "SendtoError" << WSAGetLastError() << std::endl;
+            return 1;
         }
 
     }
+
+    //勝敗を聞く
     for (int i = 0; i < playerNum; i++) {
 
 
@@ -140,7 +140,8 @@ int main()
 
         if (ret == SOCKET_ERROR)
         {
-
+            std::cout << "initoError" << WSAGetLastError() << std::endl;
+            return 1;
         }
         else
         {
@@ -152,9 +153,8 @@ int main()
     ret = closesocket(sock);
     if (ret == SOCKET_ERROR)
     {
-        /*
-            エラー処理
-        */
+        std::cout << "ClosetoError" << WSAGetLastError() << std::endl;
+        return 1;
     }
 
     // WinSockの終了処理
@@ -162,9 +162,8 @@ int main()
     //if (ret == SOCKET_ERROR)
     if (ret != 0)
     {
-        /*
-            エラー処理
-        */
+        std::cout << "CleantoError" << WSAGetLastError() << std::endl;
+        return 1;
     }
 
     return 0;
