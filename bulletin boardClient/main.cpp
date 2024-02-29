@@ -148,6 +148,10 @@ int main()
             std::cout << message << std::endl;
         }
 
+        if (strcmp(message, "ˆø‚«•ª‚¯") == 0) {
+            break;
+        }
+
     }
 
     ret = closesocket(sock);
